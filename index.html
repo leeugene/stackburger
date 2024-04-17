@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Interactive Image Replacement</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* 스크롤바 없애기 */
+        }
+        .container {
+            width: 100%;
+            height: 100vh; /* 전체 뷰포트 높이 */
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+        img {
+            width: 33%; /* 가로 길이의 1/3 */
+            height: 100vh; /* 세로 길이를 뷰포트의 100%로 설정 */
+            object-fit: fill; /* 이미지 비율 유지하면서 컨테이너에 맞춤 */
+            cursor: pointer;
+        }
+        img:hover {
+            transform: scale(1.05); /* 호버 시 약간 확대 */
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="imageContainer"></div>
+    <audio id="clickSound" src="sound.mp3"></audio> <!-- 오디오 파일 경로 지정 -->
+    <script>
+        const images = [
+        '1.png',
+'2.png',
+'3.png',
+'4.png',
+'5.png',
+'6.png',
+'7.png',
+'8.png',
+'9.png',
+'10.png',
+'11.png',
+'12.png',
+'13.png',
+'14.png',
+'15.png',
+'16.png',
+'17.png',
+'18.png',
+'19.png',
+'20.png',
+'21.png',
+'22.png',
+'23.png',
+'24.png',
+'25.png',
+'26.png',
+'27.png',
+'28.png',
+'29.png',
+'30.png',
+'31.png',
+'32.png',
+'33.png',
+'34.png',
+'35.png',
+'36.png',
+'37.png',
+'38.png',
+        ];
+        let displayedImages = [];
+
+        function initializeImages() {
+            let initialImages = [];
+            while (initialImages.length < 3) {
+                const randomIndex = Math.floor(Math.random() * images.length);
+                const selectedImage = images[randomIndex];
+                if (!initialImages.includes(selectedImage)) {
+                    initialImages.push(selectedImage);
+                    displayedImages.push(selectedImage);
+                }
+            }
+            return initialImages;
+        }
+
+        function displayImages() {
+            const container = document.getElementById('imageContainer');
+            container.innerHTML = ''; // 컨테이너 초기화
+            let initialImages = initializeImages();
+            initialImages.forEach((image, index) => {
+                const imgElement = document.createElement('img');
+                imgElement.src = image;
+                imgElement.onclick = function() {
+                    updateImage(index, imgElement); // 클릭된 이미지만 업데이트
+                };
+                container.appendChild(imgElement);
+            });
+        }
+
+        function updateImage(index, imgElement) {
+            const availableImages = images.filter(image => !displayedImages.includes(image));
+            if (availableImages.length > 0) {
+                const randomIndex = Math.floor(Math.random() * availableImages.length);
+                const newImage = availableImages[randomIndex];
+                imgElement.src = newImage;
+                displayedImages.push(newImage); // 새 이미지 보여준 리스트에 추가
+                playSound();
+            }
+        }
+
+        function playSound() {
+            const sound = document.getElementById('clickSound');
+            sound.play();
+        }
+
+        displayImages(); // 초기 이미지 로드
+    </script>
+</body>
+</html>
